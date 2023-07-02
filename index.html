@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      :root {
+        --fs-1: clamp(1.5rem, 2.5vw, 4rem);
+        --fs-2: clamp(1.1rem, 2.5vw, 4rem);
+        --fs-3: clamp(0.875rem, 2.5vw, 1rem);
+      }
+      html {
+        color-scheme: dark;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+      .container {
+        margin: 2rem auto;
+        width: min(70ch, 100% - 4rem);
+        user-select: none;
+      }
+      .header {
+        position: relative;
+        background-color: rgb(31, 29, 29);
+        border-radius: 0.5rem;
+      }
+      .header h1 {
+        padding: 1rem;
+        font-size: var(--fs-2);
+      }
+      .header button {
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+      button {
+        padding: 0.5em 1em;
+        outline: none;
+        border: none;
+        color: white;
+        background-color: lime;
+        text-transform: uppercase;
+        font-weight: bold;
+        font-size: var(--fs-3);
+        border-radius: 100vmax;
+        transition: 300ms;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: green;
+      }
+      .game-container {
+        position: relative;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 1rem;
+        padding: 1rem 0;
+        overflow: hidden;
+      }
+      .end-game {
+        position: absolute;
+        top: 1rem;
+        left: 0;
+        z-index: 2;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: calc(100% - 1rem);
+        font-weight: bold;
+        font-size: var(--fs-1);
+        background-color: rgba(0, 0, 0, 0.9);
+        border-radius: 0.5rem;
+      }
+      .square {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgb(31, 29, 29);
+        border-radius: 0.5rem;
+        aspect-ratio: 1/1;
+        cursor: pointer;
+      }
+      .square > div {
+        position: relative;
+        min-width: clamp(50px, 100%, 200px);
+        min-height: clamp(50px, 100%, 200px);
+      }
+      .square > div::before,
+      .square > div::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        background-color: white;
+        opacity: 0;
+        translate: -50% -50%;
+        transition: 300ms;
+      }
+      .square:has(.x),
+      .square:has(.o) {
+        pointer-events: none;
+      }
+      .square > .x::before,
+      .square > .x::after {
+        width: 70%;
+        height: 8px;
+        border-radius: 100vmax;
+        opacity: 1;
+      }
+      .square > .x::before {
+        transform: rotate(45deg);
+      }
+      .square > .x::after {
+        transform: rotate(-45deg);
+      }
+      .square > .o::after {
+        width: 50%;
+        aspect-ratio: 1/1;
+        background-color: transparent;
+        border: 8px solid white;
+        border-radius: 50%;
+        opacity: 1;
+      }
+      .square > .o::before {
+        display: none;
+      }
+      .close {
+        display: none !important;
+      }
+      .opac {
+        opacity: 0;
+      }
+      .players-count {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.9);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 3;
+        opacity: 1;
+        transition: opacity 700ms;
+        user-select: none;
+      }
+      .players-count-container {
+        max-width: 300px;
+        margin-inline: auto;
+        text-align: center;
+      }
+      .players-count-container p {
+        margin-block: 1rem;
+      }
+    </style>
+    <title>Tic Tac Toe</title>
+  </head>
+  <body>
+    <div class="players-count">
+      <div class="players-count-container">
+        <p>Playing with:</p>
+        <div class="btns">
+          <button>Computer</button>
+          <button>Friend</button>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="header">
+        <h1>Tic Tac Toe</h1>
+        <button class="new-game">New Game</button>
+      </div>
+      <div class="game-container">
+        <div class="end-game"></div>
+        <div class="square" data-value="1">
+          <div class="x"></div>
+        </div>
+        <div class="square" data-value="2">
+          <div class="o"></div>
+        </div>
+        <div class="square" data-value="3">
+          <div class="o"></div>
+        </div>
+        <div class="square" data-value="4">
+          <div class="o"></div>
+        </div>
+        <div class="square" data-value="5">
+          <div class="x"></div>
+        </div>
+        <div class="square" data-value="6">
+          <div class="x"></div>
+        </div>
+        <div class="square" data-value="7">
+          <div class="x"></div>
+        </div>
+        <div class="square" data-value="8">
+          <div class="x"></div>
+        </div>
+        <div class="square" data-value="9">
+          <div class="x"></div>
+        </div>
+      </div>
+    </div>
+    <audio src="./click.mp3" id="audio"></audio>
+    <script src="./main.js"></script>
+  </body>
+</html>
